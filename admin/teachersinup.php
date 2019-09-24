@@ -39,7 +39,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -87,8 +87,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
                        GetSQLValueString($_POST['txtpass'], "text"),
                        GetSQLValueString($_POST['txtsubject'], "text"));
 
-  mysql_select_db($database_PTS, $PTS);
-  $Result1 = mysql_query($insertSQL, $PTS) or die(mysql_error($PTS));
+  mysqli_select_db($database_PTS, $PTS);
+  $Result1 = mysqli_query($insertSQL, $PTS) or die(mysqli_error($PTS));
 $subj = 'Registration';
 $to =$_POST['txtmail'];
 $from = 'ptisofficial123@gmail.com';

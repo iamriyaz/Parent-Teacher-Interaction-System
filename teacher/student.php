@@ -8,7 +8,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -48,17 +48,17 @@ if (isset($_GET['pageNum_Recstudent'])) {
 }
 $startRow_Recstudent = $pageNum_Recstudent * $maxRows_Recstudent;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_Recstudent = "SELECT * FROM student,parent where reg_no='$v' and parent.Ration_card_no=student.Ration_card_no";
 $query_limit_Recstudent = sprintf("%s LIMIT %d, %d", $query_Recstudent, $startRow_Recstudent, $maxRows_Recstudent);
-$Recstudent = mysql_query($query_limit_Recstudent, $PTS) or die(mysql_error());
-$row_Recstudent = mysql_fetch_assoc($Recstudent);
+$Recstudent = mysqli_query($query_limit_Recstudent, $PTS) or die(mysqli_error());
+$row_Recstudent = mysqli_fetch_assoc($Recstudent);
 
 if (isset($_GET['totalRows_Recstudent'])) {
   $totalRows_Recstudent = $_GET['totalRows_Recstudent'];
 } else {
-  $all_Recstudent = mysql_query($query_Recstudent);
-  $totalRows_Recstudent = mysql_num_rows($all_Recstudent);
+  $all_Recstudent = mysqli_query($query_Recstudent);
+  $totalRows_Recstudent = mysqli_num_rows($all_Recstudent);
 }
 $totalPages_Recstudent = ceil($totalRows_Recstudent/$maxRows_Recstudent)-1;
 
@@ -178,7 +178,7 @@ $queryString_Recstudent = sprintf("&totalRows_Recstudent=%d%s", $totalRows_Recst
         <td>&nbsp;</td>
         <td colspan="2">&nbsp;</td>
       </tr>
-      <?php } while ($row_Recstudent = mysql_fetch_assoc($Recstudent)); ?>
+      <?php } while ($row_Recstudent = mysqli_fetch_assoc($Recstudent)); ?>
   </table>
   <table border="0">
     <tr>
@@ -209,5 +209,5 @@ $queryString_Recstudent = sprintf("&totalRows_Recstudent=%d%s", $totalRows_Recst
 	</section>
 	<!--/about-->
 <?php require_once('footer.php')?><?php
-mysql_free_result($Recstudent);
+mysqli_free_result($Recstudent);
 ?>

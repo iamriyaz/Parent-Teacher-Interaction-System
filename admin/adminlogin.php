@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_escape_string($PTS, $theValue) : mysqli_real_escape_string($PTS, $theValue);
 
   switch ($theType) {
     case "text":
@@ -49,13 +49,13 @@ if (isset($_POST['txtuser'])) {
   $MM_redirectLoginSuccess = "adminuserarea.php";
   $MM_redirectLoginFailed = "error.php";
   $MM_redirecttoReferrer = false;
-  mysql_select_db($database_PTS, $PTS);
+  mysqli_select_db($PTS, $database_PTS);
   
   $LoginRS__query=sprintf("SELECT username, password FROM `admin` WHERE username=%s AND password=%s",
     GetSQLValueString($loginUsername, "text"), GetSQLValueString($password, "text")); 
    
-  $LoginRS = mysql_query($LoginRS__query, $PTS) or die(mysql_error());
-  $loginFoundUser = mysql_num_rows($LoginRS);
+  $LoginRS = mysqli_query($PTS, $LoginRS__query) or die(mysqli_error($PTS));
+  $loginFoundUser = mysqli_num_rows($LoginRS);
   if ($loginFoundUser) {
      $loginStrGroup = "";
     

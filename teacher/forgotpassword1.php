@@ -36,11 +36,11 @@ function smtpmailer($to, $from, $from_name, $subject, $body) {
 $error="";
 if(isset($_POST['btn1']))
 {
-	 mysql_select_db($database_PTS, $PTS);
-	 $result=mysql_query("select password from teacher where username='".$_POST['txtuser']."' and e_mail='".$_POST['txtemail']."'",$PTS);
-	 if(mysql_num_rows($result))
+	 mysqli_select_db($database_PTS, $PTS);
+	 $result=mysqli_query("select password from teacher where username='".$_POST['txtuser']."' and e_mail='".$_POST['txtemail']."'",$PTS);
+	 if(mysqli_num_rows($result))
 	{
-		$rec=mysql_fetch_assoc($result);
+		$rec=mysqli_fetch_assoc($result);
 		$pwd=$rec['password'];
 		 $subj = 'Forgot Password';
 			$to =$_POST['txtemail'] ;

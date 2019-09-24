@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -40,17 +40,17 @@ if (isset($_GET['pageNum_Recteachers'])) {
 }
 $startRow_Recteachers = $pageNum_Recteachers * $maxRows_Recteachers;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_Recteachers = "SELECT teacher.faculty_no, teacher.first_name, teacher.last_name, teacher.phone_no FROM teacher";
 $query_limit_Recteachers = sprintf("%s LIMIT %d, %d", $query_Recteachers, $startRow_Recteachers, $maxRows_Recteachers);
-$Recteachers = mysql_query($query_limit_Recteachers, $PTS) or die(mysql_error());
-$row_Recteachers = mysql_fetch_assoc($Recteachers);
+$Recteachers = mysqli_query($query_limit_Recteachers, $PTS) or die(mysqli_error());
+$row_Recteachers = mysqli_fetch_assoc($Recteachers);
 
 if (isset($_GET['totalRows_Recteachers'])) {
   $totalRows_Recteachers = $_GET['totalRows_Recteachers'];
 } else {
-  $all_Recteachers = mysql_query($query_Recteachers);
-  $totalRows_Recteachers = mysql_num_rows($all_Recteachers);
+  $all_Recteachers = mysqli_query($query_Recteachers);
+  $totalRows_Recteachers = mysqli_num_rows($all_Recteachers);
 }
 $totalPages_Recteachers = ceil($totalRows_Recteachers/$maxRows_Recteachers)-1;
 
@@ -110,7 +110,7 @@ $queryString_Recteachers = sprintf("&totalRows_Recteachers=%d%s", $totalRows_Rec
         <td><?php echo $row_Recteachers['phone_no']; ?></td>
         <td><a href="adminteacherview2.php?fno=<?php echo $row_Recteachers['faculty_no']; ?>">View</a></td>
       </tr>
-      <?php } while ($row_Recteachers = mysql_fetch_assoc($Recteachers)); ?>
+      <?php } while ($row_Recteachers = mysqli_fetch_assoc($Recteachers)); ?>
   </table>
   <table border="0">
     <tr>
@@ -140,5 +140,5 @@ $queryString_Recteachers = sprintf("&totalRows_Recteachers=%d%s", $totalRows_Rec
 	</section>
 	<!--/about-->
 <?php require_once('footer.php')?><?php
-mysql_free_result($Recteachers);
+mysqli_free_result($Recteachers);
 ?>

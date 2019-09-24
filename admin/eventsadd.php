@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -38,17 +38,17 @@ if (isset($_GET['pageNum_recevent1'])) {
 }
 $startRow_recevent1 = $pageNum_recevent1 * $maxRows_recevent1;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_recevent1 = "SELECT * FROM event ORDER BY event.id desc";
 $query_limit_recevent1 = sprintf("%s LIMIT %d, %d", $query_recevent1, $startRow_recevent1, $maxRows_recevent1);
-$recevent1 = mysql_query($query_limit_recevent1, $PTS) or die(mysql_error());
-$row_recevent1 = mysql_fetch_assoc($recevent1);
+$recevent1 = mysqli_query($query_limit_recevent1, $PTS) or die(mysqli_error());
+$row_recevent1 = mysqli_fetch_assoc($recevent1);
 
 if (isset($_GET['totalRows_recevent1'])) {
   $totalRows_recevent1 = $_GET['totalRows_recevent1'];
 } else {
-  $all_recevent1 = mysql_query($query_recevent1);
-  $totalRows_recevent1 = mysql_num_rows($all_recevent1);
+  $all_recevent1 = mysqli_query($query_recevent1);
+  $totalRows_recevent1 = mysqli_num_rows($all_recevent1);
 }
 $totalPages_recevent1 = ceil($totalRows_recevent1/$maxRows_recevent1)-1;
 
@@ -69,8 +69,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1"))
                        GetSQLValueString($_POST['txtdis'], "text"),
                        GetSQLValueString($_FILES['fileevent']['name'], "text"));
 
-  mysql_select_db($database_PTS, $PTS);
-  $Result1 = mysql_query($insertSQL, $PTS) or die(mysql_error());
+  mysqli_select_db($database_PTS, $PTS);
+  $Result1 = mysqli_query($insertSQL, $PTS) or die(mysqli_error());
 
   $insertGoTo = "eventsadd.php";
   if (isset($_SERVER['QUERY_STRING'])) {
@@ -165,7 +165,7 @@ else
 	 //Delete a record
 	 if(isset($_POST['btnDelete'.$c]))
 	 {
-		 mysql_query("delete from event where id=".$row_recevent1['id'],$PTS);
+		 mysqli_query("delete from event where id=".$row_recevent1['id'],$PTS);
 		 header("location:".$_SERVER['PHP_SELF']);
 	 }
 	 ?>
@@ -177,7 +177,7 @@ else
         </tr>
         <?php 
 		$c++;
-		} while ($row_recevent1 = mysql_fetch_assoc($recevent1)); ?>
+		} while ($row_recevent1 = mysqli_fetch_assoc($recevent1)); ?>
     </table>
   </div>
 </form>
@@ -195,5 +195,5 @@ var sprytextfield1 = new Spry.Widget.ValidationTextField("sprytextfield1");
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($recevent1);
+mysqli_free_result($recevent1);
 ?>

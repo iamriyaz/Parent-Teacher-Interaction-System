@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -52,17 +52,17 @@ if (isset($_GET['pageNum_Recparentprof'])) {
 }
 $startRow_Recparentprof = $pageNum_Recparentprof * $maxRows_Recparentprof;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_Recparentprof = "SELECT * FROM parent WHERE parent.username='$username' and verified=1";
 $query_limit_Recparentprof = sprintf("%s LIMIT %d, %d", $query_Recparentprof, $startRow_Recparentprof, $maxRows_Recparentprof);
-$Recparentprof = mysql_query($query_limit_Recparentprof, $PTS) or die(mysql_error());
-$row_Recparentprof = mysql_fetch_assoc($Recparentprof);
+$Recparentprof = mysqli_query($query_limit_Recparentprof, $PTS) or die(mysqli_error());
+$row_Recparentprof = mysqli_fetch_assoc($Recparentprof);
 
 if (isset($_GET['totalRows_Recparentprof'])) {
   $totalRows_Recparentprof = $_GET['totalRows_Recparentprof'];
 } else {
-  $all_Recparentprof = mysql_query($query_Recparentprof);
-  $totalRows_Recparentprof = mysql_num_rows($all_Recparentprof);
+  $all_Recparentprof = mysqli_query($query_Recparentprof);
+  $totalRows_Recparentprof = mysqli_num_rows($all_Recparentprof);
 }
 $totalPages_Recparentprof = ceil($totalRows_Recparentprof/$maxRows_Recparentprof)-1;
 ?>
@@ -135,7 +135,7 @@ $totalPages_Recparentprof = ceil($totalRows_Recparentprof/$maxRows_Recparentprof
         <td>&nbsp;</td>
         <td><a href="updateparent.php?username=<?php echo $row_Recparentprof['username']; ?>">Update Profile</a></td>
       </tr>
-      <?php } while ($row_Recparentprof = mysql_fetch_assoc($Recparentprof)); ?>
+      <?php } while ($row_Recparentprof = mysqli_fetch_assoc($Recparentprof)); ?>
   </table>
 </form>
 <?php require_once('parentmenu.php')?>
@@ -150,5 +150,5 @@ $totalPages_Recparentprof = ceil($totalRows_Recparentprof/$maxRows_Recparentprof
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($Recparentprof);
+mysqli_free_result($Recparentprof);
 ?>

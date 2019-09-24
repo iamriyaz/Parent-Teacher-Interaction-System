@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -55,17 +55,17 @@ if (isset($_GET['pageNum_Recstudent1'])) {
 }
 $startRow_Recstudent1 = $pageNum_Recstudent1 * $maxRows_Recstudent1;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_Recstudent1 = "SELECT * FROM student where student.Ration_card_no='$CNO'";
 $query_limit_Recstudent1 = sprintf("%s LIMIT %d, %d", $query_Recstudent1, $startRow_Recstudent1, $maxRows_Recstudent1);
-$Recstudent1 = mysql_query($query_limit_Recstudent1, $PTS) or die(mysql_error());
-$row_Recstudent1 = mysql_fetch_assoc($Recstudent1);
+$Recstudent1 = mysqli_query($query_limit_Recstudent1, $PTS) or die(mysqli_error());
+$row_Recstudent1 = mysqli_fetch_assoc($Recstudent1);
 
 if (isset($_GET['totalRows_Recstudent1'])) {
   $totalRows_Recstudent1 = $_GET['totalRows_Recstudent1'];
 } else {
-  $all_Recstudent1 = mysql_query($query_Recstudent1);
-  $totalRows_Recstudent1 = mysql_num_rows($all_Recstudent1);
+  $all_Recstudent1 = mysqli_query($query_Recstudent1);
+  $totalRows_Recstudent1 = mysqli_num_rows($all_Recstudent1);
 }
 $totalPages_Recstudent1 = ceil($totalRows_Recstudent1/$maxRows_Recstudent1)-1;
 
@@ -76,17 +76,17 @@ if (isset($_GET['pageNum_Recteachers1'])) {
 }
 $startRow_Recteachers1 = $pageNum_Recteachers1 * $maxRows_Recteachers1;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_Recteachers1 = "SELECT * FROM teacher where standard in (select standard from student where ration_card_no='$CNO') and division in(select division from student where ration_card_no='$CNO') and is_class_teacher=1";
 $query_limit_Recteachers1 = sprintf("%s LIMIT %d, %d", $query_Recteachers1, $startRow_Recteachers1, $maxRows_Recteachers1);
-$Recteachers1 = mysql_query($query_limit_Recteachers1, $PTS) or die(mysql_error());
-$row_Recteachers1 = mysql_fetch_assoc($Recteachers1);
+$Recteachers1 = mysqli_query($query_limit_Recteachers1, $PTS) or die(mysqli_error());
+$row_Recteachers1 = mysqli_fetch_assoc($Recteachers1);
 
 if (isset($_GET['totalRows_Recteachers1'])) {
   $totalRows_Recteachers1 = $_GET['totalRows_Recteachers1'];
 } else {
-  $all_Recteachers1 = mysql_query($query_Recteachers1);
-  $totalRows_Recteachers1 = mysql_num_rows($all_Recteachers1);
+  $all_Recteachers1 = mysqli_query($query_Recteachers1);
+  $totalRows_Recteachers1 = mysqli_num_rows($all_Recteachers1);
 }
 $totalPages_Recteachers1 = ceil($totalRows_Recteachers1/$maxRows_Recteachers1)-1;
 
@@ -214,12 +214,12 @@ $queryString_Recstudent1 = sprintf("&totalRows_Recstudent1=%d%s", $totalRows_Rec
         <?php } // Show if not last page ?></td>
   </tr>
 </table>
-    <?php mysql_select_db($database_PTS, $PTS);
+    <?php mysqli_select_db($database_PTS, $PTS);
 $query_Recteachers1 = "SELECT * FROM teacher WHERE teacher.standard in (select standard from student where reg_no=".$row_Recstudent1['reg_no'].") AND teacher.division in (select division from student where reg_no=".$row_Recstudent1['reg_no'].")";
-$Recteachers1 = mysql_query($query_Recteachers1, $PTS) or die(mysql_error());
-$row_Recteachers1 = mysql_fetch_assoc($Recteachers1);
-$totalRows_Recteachers1 = mysql_num_rows($Recteachers1);?>
-    <?php } while ($row_Recstudent1 = mysql_fetch_assoc($Recstudent1)); ?>
+$Recteachers1 = mysqli_query($query_Recteachers1, $PTS) or die(mysqli_error());
+$row_Recteachers1 = mysqli_fetch_assoc($Recteachers1);
+$totalRows_Recteachers1 = mysqli_num_rows($Recteachers1);?>
+    <?php } while ($row_Recstudent1 = mysqli_fetch_assoc($Recstudent1)); ?>
 <table border="0">
 <table border="0" class="table table-striped">
     <thead style="background-color:#036;color:#fff">
@@ -249,7 +249,7 @@ $totalRows_Recteachers1 = mysql_num_rows($Recteachers1);?>
           <td><?php echo $row_Recteachers1['is_class_teacher']; ?></td>
           <td><?php echo $row_Recteachers1['subject']; ?></td>
         </tr>
-        <?php } while ($row_Recteachers1 = mysql_fetch_assoc($Recteachers1)); ?>
+        <?php } while ($row_Recteachers1 = mysqli_fetch_assoc($Recteachers1)); ?>
     </table>
   
  </div>
@@ -263,7 +263,7 @@ $totalRows_Recteachers1 = mysql_num_rows($Recteachers1);?>
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($Recstudent1);
+mysqli_free_result($Recstudent1);
 
-mysql_free_result($Recteachers1);
+mysqli_free_result($Recteachers1);
 ?>

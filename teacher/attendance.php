@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -45,17 +45,17 @@ if (isset($_GET['pageNum_recattendance1'])) {
 }
 $startRow_recattendance1 = $pageNum_recattendance1 * $maxRows_recattendance1;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_recattendance1 = "SELECT * FROM attendance WHERE attendance.regno='$v'";
 $query_limit_recattendance1 = sprintf("%s LIMIT %d, %d", $query_recattendance1, $startRow_recattendance1, $maxRows_recattendance1);
-$recattendance1 = mysql_query($query_limit_recattendance1, $PTS) or die(mysql_error());
-$row_recattendance1 = mysql_fetch_assoc($recattendance1);
+$recattendance1 = mysqli_query($query_limit_recattendance1, $PTS) or die(mysqli_error());
+$row_recattendance1 = mysqli_fetch_assoc($recattendance1);
 
 if (isset($_GET['totalRows_recattendance1'])) {
   $totalRows_recattendance1 = $_GET['totalRows_recattendance1'];
 } else {
-  $all_recattendance1 = mysql_query($query_recattendance1);
-  $totalRows_recattendance1 = mysql_num_rows($all_recattendance1);
+  $all_recattendance1 = mysqli_query($query_recattendance1);
+  $totalRows_recattendance1 = mysqli_num_rows($all_recattendance1);
 }
 $totalPages_recattendance1 = ceil($totalRows_recattendance1/$maxRows_recattendance1)-1;
 ?>
@@ -96,7 +96,7 @@ $totalPages_recattendance1 = ceil($totalRows_recattendance1/$maxRows_recattendan
         <td><?php echo $row_recattendance1['status']; ?></td>
         <td><?php echo $row_recattendance1['performance']; ?></td>
       </tr>
-      <?php } while ($row_recattendance1 = mysql_fetch_assoc($recattendance1)); ?>
+      <?php } while ($row_recattendance1 = mysqli_fetch_assoc($recattendance1)); ?>
   </table>
 </form>
  </div>
@@ -110,5 +110,5 @@ $totalPages_recattendance1 = ceil($totalRows_recattendance1/$maxRows_recattendan
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($recattendance1);
+mysqli_free_result($recattendance1);
 ?>

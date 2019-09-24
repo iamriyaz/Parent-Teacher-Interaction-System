@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -55,17 +55,17 @@ if (isset($_GET['pageNum_Recteacherpro'])) {
 }
 $startRow_Recteacherpro = $pageNum_Recteacherpro * $maxRows_Recteacherpro;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_Recteacherpro = "SELECT * FROM teacher WHERE teacher.username='$username'";
 $query_limit_Recteacherpro = sprintf("%s LIMIT %d, %d", $query_Recteacherpro, $startRow_Recteacherpro, $maxRows_Recteacherpro);
-$Recteacherpro = mysql_query($query_limit_Recteacherpro, $PTS) or die(mysql_error());
-$row_Recteacherpro = mysql_fetch_assoc($Recteacherpro);
+$Recteacherpro = mysqli_query($query_limit_Recteacherpro, $PTS) or die(mysqli_error());
+$row_Recteacherpro = mysqli_fetch_assoc($Recteacherpro);
 
 if (isset($_GET['totalRows_Recteacherpro'])) {
   $totalRows_Recteacherpro = $_GET['totalRows_Recteacherpro'];
 } else {
-  $all_Recteacherpro = mysql_query($query_Recteacherpro);
-  $totalRows_Recteacherpro = mysql_num_rows($all_Recteacherpro);
+  $all_Recteacherpro = mysqli_query($query_Recteacherpro);
+  $totalRows_Recteacherpro = mysqli_num_rows($all_Recteacherpro);
 }
 $totalPages_Recteacherpro = ceil($totalRows_Recteacherpro/$maxRows_Recteacherpro)-1;
 ?>
@@ -157,7 +157,7 @@ $totalPages_Recteacherpro = ceil($totalRows_Recteacherpro/$maxRows_Recteacherpro
         <td>&nbsp;</td>
         <td><a href="updateteacher.php?faculty_no=<?php echo $row_Recteacherpro['faculty_no']; ?>">Update profile</a></td>
       </tr>
-      <?php } while ($row_Recteacherpro = mysql_fetch_assoc($Recteacherpro)); ?>
+      <?php } while ($row_Recteacherpro = mysqli_fetch_assoc($Recteacherpro)); ?>
   </table>
 </form>
 </div>
@@ -171,5 +171,5 @@ $totalPages_Recteacherpro = ceil($totalRows_Recteacherpro/$maxRows_Recteacherpro
 	</section>
 	<!--/about-->
 <?php require_once('footer.php')?><?php
-mysql_free_result($Recteacherpro);
+mysqli_free_result($Recteacherpro);
 ?>

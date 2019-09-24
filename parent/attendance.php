@@ -15,7 +15,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -48,17 +48,17 @@ if (isset($_GET['pageNum_RecAttendance'])) {
 }
 $startRow_RecAttendance = $pageNum_RecAttendance * $maxRows_RecAttendance;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_RecAttendance = "SELECT * FROM attendance WHERE attendance.regno='$regno' ORDER BY attendance.`date` Desc";
 $query_limit_RecAttendance = sprintf("%s LIMIT %d, %d", $query_RecAttendance, $startRow_RecAttendance, $maxRows_RecAttendance);
-$RecAttendance = mysql_query($query_limit_RecAttendance, $PTS) or die(mysql_error());
-$row_RecAttendance = mysql_fetch_assoc($RecAttendance);
+$RecAttendance = mysqli_query($query_limit_RecAttendance, $PTS) or die(mysqli_error());
+$row_RecAttendance = mysqli_fetch_assoc($RecAttendance);
 
 if (isset($_GET['totalRows_RecAttendance'])) {
   $totalRows_RecAttendance = $_GET['totalRows_RecAttendance'];
 } else {
-  $all_RecAttendance = mysql_query($query_RecAttendance);
-  $totalRows_RecAttendance = mysql_num_rows($all_RecAttendance);
+  $all_RecAttendance = mysqli_query($query_RecAttendance);
+  $totalRows_RecAttendance = mysqli_num_rows($all_RecAttendance);
 }
 $totalPages_RecAttendance = ceil($totalRows_RecAttendance/$maxRows_RecAttendance)-1;
 
@@ -114,7 +114,7 @@ $queryString_RecAttendance = sprintf("&totalRows_RecAttendance=%d%s", $totalRows
                         <td><?php echo $row_RecAttendance['status']; ?></td>
                         <td><?php echo $row_RecAttendance['performance']; ?></td>
                       </tr>
-                      <?php } while ($row_RecAttendance = mysql_fetch_assoc($RecAttendance)); ?>
+                      <?php } while ($row_RecAttendance = mysqli_fetch_assoc($RecAttendance)); ?>
                   </table>
                   <table border="0">
                     <tr>
@@ -143,5 +143,5 @@ $queryString_RecAttendance = sprintf("&totalRows_RecAttendance=%d%s", $totalRows
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($RecAttendance);
+mysqli_free_result($RecAttendance);
 ?>

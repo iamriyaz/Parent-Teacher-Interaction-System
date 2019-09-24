@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -38,17 +38,17 @@ if (isset($_GET['pageNum_recfeedbackview'])) {
 }
 $startRow_recfeedbackview = $pageNum_recfeedbackview * $maxRows_recfeedbackview;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_recfeedbackview = "SELECT * FROM feedback ORDER BY feedback.id desc";
 $query_limit_recfeedbackview = sprintf("%s LIMIT %d, %d", $query_recfeedbackview, $startRow_recfeedbackview, $maxRows_recfeedbackview);
-$recfeedbackview = mysql_query($query_limit_recfeedbackview, $PTS) or die(mysql_error());
-$row_recfeedbackview = mysql_fetch_assoc($recfeedbackview);
+$recfeedbackview = mysqli_query($query_limit_recfeedbackview, $PTS) or die(mysqli_error());
+$row_recfeedbackview = mysqli_fetch_assoc($recfeedbackview);
 
 if (isset($_GET['totalRows_recfeedbackview'])) {
   $totalRows_recfeedbackview = $_GET['totalRows_recfeedbackview'];
 } else {
-  $all_recfeedbackview = mysql_query($query_recfeedbackview);
-  $totalRows_recfeedbackview = mysql_num_rows($all_recfeedbackview);
+  $all_recfeedbackview = mysqli_query($query_recfeedbackview);
+  $totalRows_recfeedbackview = mysqli_num_rows($all_recfeedbackview);
 }
 $totalPages_recfeedbackview = ceil($totalRows_recfeedbackview/$maxRows_recfeedbackview)-1;
 ?>
@@ -88,7 +88,7 @@ $totalPages_recfeedbackview = ceil($totalRows_recfeedbackview/$maxRows_recfeedba
 	 //Delete a record
 	 if(isset($_POST['btnDelete'.$c]))
 	 {
-		 mysql_query("delete from feedback where id=".$row_recfeedbackview['id'],$PTS);
+		 mysqli_query("delete from feedback where id=".$row_recfeedbackview['id'],$PTS);
 		 header("location:".$_SERVER['PHP_SELF']);
 	 } ?>
       <tr>
@@ -98,7 +98,7 @@ $totalPages_recfeedbackview = ceil($totalRows_recfeedbackview/$maxRows_recfeedba
       </tr>
       <?php 
 	   $c++;
-	 } while ($row_recfeedbackview = mysql_fetch_assoc($recfeedbackview)); ?>
+	 } while ($row_recfeedbackview = mysqli_fetch_assoc($recfeedbackview)); ?>
   </table>
 </form>
 <script type="text/javascript">
@@ -115,5 +115,5 @@ var sprytextarea1 = new Spry.Widget.ValidationTextarea("sprytextarea1");
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($recfeedbackview);
+mysqli_free_result($recfeedbackview);
 ?>

@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -38,17 +38,17 @@ if (isset($_GET['pageNum_recgalleryview'])) {
 }
 $startRow_recgalleryview = $pageNum_recgalleryview * $maxRows_recgalleryview;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($PTS, $database_PTS);
 $query_recgalleryview = "SELECT * FROM gallery ORDER BY gallery.id desc";
 $query_limit_recgalleryview = sprintf("%s LIMIT %d, %d", $query_recgalleryview, $startRow_recgalleryview, $maxRows_recgalleryview);
-$recgalleryview = mysql_query($query_limit_recgalleryview, $PTS) or die(mysql_error());
-$row_recgalleryview = mysql_fetch_assoc($recgalleryview);
+$recgalleryview = mysqli_query($PTS, $query_limit_recgalleryview) or die(mysqli_error($PTS));
+$row_recgalleryview = mysqli_fetch_assoc($recgalleryview);
 
 if (isset($_GET['totalRows_recgalleryview'])) {
   $totalRows_recgalleryview = $_GET['totalRows_recgalleryview'];
 } else {
-  $all_recgalleryview = mysql_query($query_recgalleryview);
-  $totalRows_recgalleryview = mysql_num_rows($all_recgalleryview);
+  $all_recgalleryview = mysqli_query($query_recgalleryview);
+  $totalRows_recgalleryview = mysqli_num_rows($all_recgalleryview);
 }
 $totalPages_recgalleryview = ceil($totalRows_recgalleryview/$maxRows_recgalleryview)-1;
 ?>
@@ -74,7 +74,7 @@ $totalPages_recgalleryview = ceil($totalRows_recgalleryview/$maxRows_recgalleryv
         <td>&nbsp;</td>
         <td>&nbsp;</td>
       </tr>
-      <?php //} while ($row_recgalleryview = mysql_fetch_assoc($recgalleryview)); ?>
+      <?php //} while ($row_recgalleryview = mysqli_fetch_assoc($recgalleryview)); ?>
   </table>
 </form>-->
 
@@ -111,7 +111,7 @@ $totalPages_recgalleryview = ceil($totalRows_recgalleryview/$maxRows_recgalleryv
 									</div>
                                 </article>
 
-				 <?php } while ($row_recgalleryview = mysql_fetch_assoc($recgalleryview)); ?>
+				 <?php } while ($row_recgalleryview = mysqli_fetch_assoc($recgalleryview)); ?>
                  
                                <!-- <article class="col-md-4 isotopeItem photography">
 									<div class="portfolio-item">
@@ -248,5 +248,5 @@ $totalPages_recgalleryview = ceil($totalRows_recgalleryview/$maxRows_recgalleryv
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($recgalleryview);
+mysqli_free_result($recgalleryview);
 ?>

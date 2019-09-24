@@ -24,7 +24,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -55,11 +55,11 @@ if (isset($_SERVER['QUERY_STRING'])) {
 
 $err="";
 if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
-	mysql_select_db($database_PTS, $PTS);
+	mysqli_select_db($database_PTS, $PTS);
 $query_recchangepass = "SELECT * FROM parent WHERE username='$username' and password='".$_POST['txtpass1']."'";
-$recchangepass = mysql_query($query_recchangepass, $PTS) or die(mysql_error());
-$row_recchangepass = mysql_fetch_assoc($recchangepass);
-$totalRows_recchangepass = mysql_num_rows($recchangepass);
+$recchangepass = mysqli_query($query_recchangepass, $PTS) or die(mysqli_error());
+$row_recchangepass = mysqli_fetch_assoc($recchangepass);
+$totalRows_recchangepass = mysqli_num_rows($recchangepass);
 
 	if($totalRows_recchangepass)
 	{
@@ -68,8 +68,8 @@ $totalRows_recchangepass = mysql_num_rows($recchangepass);
                        GetSQLValueString($_POST['txtpass3'], "text"),
                        GetSQLValueString($username, "text"));
 
-  mysql_select_db($database_PTS, $PTS);
-  $Result1 = mysql_query($updateSQL, $PTS) or die(mysql_error());
+  mysqli_select_db($database_PTS, $PTS);
+  $Result1 = mysqli_query($updateSQL, $PTS) or die(mysqli_error());
 
   $updateGoTo = "logout.php";
   if (isset($_SERVER['QUERY_STRING'])) {

@@ -22,7 +22,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -55,17 +55,17 @@ if (isset($_GET['pageNum_recInbox'])) {
 }
 $startRow_recInbox = $pageNum_recInbox * $maxRows_recInbox;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_recInbox = "SELECT * FROM groupmsg WHERE `to`='$username'";
 $query_limit_recInbox = sprintf("%s LIMIT %d, %d", $query_recInbox, $startRow_recInbox, $maxRows_recInbox);
-$recInbox = mysql_query($query_limit_recInbox, $PTS) or die(mysql_error());
-$row_recInbox = mysql_fetch_assoc($recInbox);
+$recInbox = mysqli_query($query_limit_recInbox, $PTS) or die(mysqli_error());
+$row_recInbox = mysqli_fetch_assoc($recInbox);
 
 if (isset($_GET['totalRows_recInbox'])) {
   $totalRows_recInbox = $_GET['totalRows_recInbox'];
 } else {
-  $all_recInbox = mysql_query($query_recInbox);
-  $totalRows_recInbox = mysql_num_rows($all_recInbox);
+  $all_recInbox = mysqli_query($query_recInbox);
+  $totalRows_recInbox = mysqli_num_rows($all_recInbox);
 }
 $totalPages_recInbox = ceil($totalRows_recInbox/$maxRows_recInbox)-1;
 
@@ -117,7 +117,7 @@ $queryString_recInbox = sprintf("&totalRows_recInbox=%d%s", $totalRows_recInbox,
 	 //Delete a record
 	 if(isset($_POST['btnDelete'.$c]))
 	 {
-		 mysql_query("delete from groupmsg where id=".$row_recInbox['id'],$PTS) or die(mysql_error($PTS));
+		 mysqli_query("delete from groupmsg where id=".$row_recInbox['id'],$PTS) or die(mysqli_error($PTS));
 		 header("location:".$_SERVER['PHP_SELF']);
 	 }
 				   ?>
@@ -139,7 +139,7 @@ $queryString_recInbox = sprintf("&totalRows_recInbox=%d%s", $totalRows_recInbox,
                     </tr>
                     <?php
 					 $c++;
-					 } while ($row_recInbox = mysql_fetch_assoc($recInbox)); ?>
+					 } while ($row_recInbox = mysqli_fetch_assoc($recInbox)); ?>
                 </table>
                  </form>
                 <table border="0">
@@ -169,5 +169,5 @@ $queryString_recInbox = sprintf("&totalRows_recInbox=%d%s", $totalRows_recInbox,
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($recInbox);
+mysqli_free_result($recInbox);
 ?>

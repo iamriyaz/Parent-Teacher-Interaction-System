@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -31,11 +31,11 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
 }
 }
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_Recfac = "SELECT * FROM teacher";
-$Recfac = mysql_query($query_Recfac, $PTS) or die(mysql_error());
-$row_Recfac = mysql_fetch_assoc($Recfac);
-$totalRows_Recfac = mysql_num_rows($Recfac);
+$Recfac = mysqli_query($query_Recfac, $PTS) or die(mysqli_error());
+$row_Recfac = mysqli_fetch_assoc($Recfac);
+$totalRows_Recfac = mysqli_num_rows($Recfac);
 ?>
 <?php require_once('header1.php')?>
 <script src="SpryAssets/SpryValidationSelect.js" type="text/javascript"></script>
@@ -82,11 +82,11 @@ do {
 ?>
           <option value="<?php echo $row_Recfac['faculty_no']?>"<?php if (!(strcmp($row_Recfac['faculty_no'], $row_Recfac['faculty_no']))) {echo "selected=\"selected\"";} ?>><?php echo $row_Recfac['faculty_no']?></option>
           <?php
-} while ($row_Recfac = mysql_fetch_assoc($Recfac));
-  $rows = mysql_num_rows($Recfac);
+} while ($row_Recfac = mysqli_fetch_assoc($Recfac));
+  $rows = mysqli_num_rows($Recfac);
   if($rows > 0) {
-      mysql_data_seek($Recfac, 0);
-	  $row_Recfac = mysql_fetch_assoc($Recfac);
+      mysqli_data_seek($Recfac, 0);
+	  $row_Recfac = mysqli_fetch_assoc($Recfac);
   }
 ?>
           </select>
@@ -191,5 +191,5 @@ var spryselect4 = new Spry.Widget.ValidationSelect("spryselect4");
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($Recfac);
+mysqli_free_result($Recfac);
 ?>

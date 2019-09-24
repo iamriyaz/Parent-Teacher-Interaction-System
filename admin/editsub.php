@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -48,8 +48,8 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form2")) {
                        GetSQLValueString($_POST['standard'], "int"),
                        GetSQLValueString($_POST['sub_code'], "int"));
 
-  mysql_select_db($database_PTS, $PTS);
-  $Result1 = mysql_query($updateSQL, $PTS) or die(mysql_error());
+  mysqli_select_db($database_PTS, $PTS);
+  $Result1 = mysqli_query($updateSQL, $PTS) or die(mysqli_error());
 
   $updateGoTo = "subjectclass.php";
   if (isset($_SERVER['QUERY_STRING'])) {
@@ -59,11 +59,11 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form2")) {
   header(sprintf("Location: %s", $updateGoTo));
 }
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_Receditsub = "SELECT * FROM subject WHERE sub_code=$v";
-$Receditsub = mysql_query($query_Receditsub, $PTS) or die(mysql_error());
-$row_Receditsub = mysql_fetch_assoc($Receditsub);
-$totalRows_Receditsub = mysql_num_rows($Receditsub);
+$Receditsub = mysqli_query($query_Receditsub, $PTS) or die(mysqli_error());
+$row_Receditsub = mysqli_fetch_assoc($Receditsub);
+$totalRows_Receditsub = mysqli_num_rows($Receditsub);
 ?>
 <?php require_once('header1.php')?>
 
@@ -122,5 +122,5 @@ $totalRows_Receditsub = mysql_num_rows($Receditsub);
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($Receditsub);
+mysqli_free_result($Receditsub);
 ?>

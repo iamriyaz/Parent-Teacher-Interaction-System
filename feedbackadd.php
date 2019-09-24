@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -41,8 +41,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
                        GetSQLValueString($_POST['txtmsg'], "text"),
                        GetSQLValueString($_POST['txtname'], "text"));
 
-  mysql_select_db($database_PTS, $PTS);
-  $Result1 = mysql_query($insertSQL, $PTS) or die(mysql_error());
+  mysqli_select_db($database_PTS, $PTS);
+  $Result1 = mysqli_query($insertSQL, $PTS) or die(mysqli_error());
 }
 
 $maxRows_recfeedback = 10;
@@ -52,17 +52,17 @@ if (isset($_GET['pageNum_recfeedback'])) {
 }
 $startRow_recfeedback = $pageNum_recfeedback * $maxRows_recfeedback;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($PTS, $database_PTS);
 $query_recfeedback = "SELECT * FROM feedback ORDER BY feedback.id desc";
 $query_limit_recfeedback = sprintf("%s LIMIT %d, %d", $query_recfeedback, $startRow_recfeedback, $maxRows_recfeedback);
-$recfeedback = mysql_query($query_limit_recfeedback, $PTS) or die(mysql_error());
-$row_recfeedback = mysql_fetch_assoc($recfeedback);
+$recfeedback = mysqli_query($PTS, $query_limit_recfeedback) or die(mysqli_error($PTS));
+$row_recfeedback = mysqli_fetch_assoc($recfeedback);
 
 if (isset($_GET['totalRows_recfeedback'])) {
   $totalRows_recfeedback = $_GET['totalRows_recfeedback'];
 } else {
-  $all_recfeedback = mysql_query($query_recfeedback);
-  $totalRows_recfeedback = mysql_num_rows($all_recfeedback);
+  $all_recfeedback = mysqli_query($query_recfeedback);
+  $totalRows_recfeedback = mysqli_num_rows($all_recfeedback);
 }
 $totalPages_recfeedback = ceil($totalRows_recfeedback/$maxRows_recfeedback)-1;
 ?>
@@ -118,7 +118,7 @@ $totalPages_recfeedback = ceil($totalRows_recfeedback/$maxRows_recfeedback)-1;
         <td><p><?php echo $row_recfeedback['feedback']; ?></p></td>
       </tr>
     
-      <?php } while ($row_recfeedback = mysql_fetch_assoc($recfeedback)); ?>
+      <?php } while ($row_recfeedback = mysqli_fetch_assoc($recfeedback)); ?>
   </table>
   <span id="sprytextarea1">
   <label for="txtmsg"></label>
@@ -139,5 +139,5 @@ var sprytextfield1 = new Spry.Widget.ValidationTextField("sprytextfield1");
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($recfeedback);
+mysqli_free_result($recfeedback);
 ?>

@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -38,11 +38,11 @@ if (isset($_GET['pageNum_recevent1'])) {
 }
 $startRow_recevent1 = $pageNum_recevent1 * $maxRows_recevent1;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($PTS, $database_PTS);
 $query_recevent1 = "SELECT * FROM event ORDER BY event.id desc";
 $query_limit_recevent1 = sprintf("%s LIMIT %d, %d", $query_recevent1, $startRow_recevent1, $maxRows_recevent1);
-$recevent1 = mysql_query($query_limit_recevent1, $PTS) or die(mysql_error());
-$row_recevent1 = mysql_fetch_assoc($recevent1);
+$recevent1 = mysqli_query($PTS, $query_limit_recevent1) or die(mysqli_error($PTS));
+$row_recevent1 = mysqli_fetch_assoc($recevent1);
 ?>
 <?php require_once('header1.php')?>
 <?php require_once('header2.php')?>
@@ -79,7 +79,7 @@ $row_recevent1 = mysql_fetch_assoc($recevent1);
       </tr>
       <?php 
 		
-		} while ($row_recevent1 = mysql_fetch_assoc($recevent1)); ?>
+		} while ($row_recevent1 = mysqli_fetch_assoc($recevent1)); ?>
     </table>
   </div>
 </form>

@@ -15,7 +15,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -46,17 +46,17 @@ if (isset($_GET['pageNum_RecScoresheet'])) {
 }
 $startRow_RecScoresheet = $pageNum_RecScoresheet * $maxRows_RecScoresheet;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_RecScoresheet = "SELECT  `ID`, `RegNO`, scoresheet.`Subject`, `Mark`, `Grade`, `Teacher` ,`sub_code`, `sub_name`, subject.`standard` FROM scoresheet,subject WHERE subject.sub_code=scoresheet.Subject and  scoresheet.RegNO='$regno'";
 $query_limit_RecScoresheet = sprintf("%s LIMIT %d, %d", $query_RecScoresheet, $startRow_RecScoresheet, $maxRows_RecScoresheet);
-$RecScoresheet = mysql_query($query_limit_RecScoresheet, $PTS) or die(mysql_error());
-$row_RecScoresheet = mysql_fetch_assoc($RecScoresheet);
+$RecScoresheet = mysqli_query($query_limit_RecScoresheet, $PTS) or die(mysqli_error());
+$row_RecScoresheet = mysqli_fetch_assoc($RecScoresheet);
 
 if (isset($_GET['totalRows_RecScoresheet'])) {
   $totalRows_RecScoresheet = $_GET['totalRows_RecScoresheet'];
 } else {
-  $all_RecScoresheet = mysql_query($query_RecScoresheet);
-  $totalRows_RecScoresheet = mysql_num_rows($all_RecScoresheet);
+  $all_RecScoresheet = mysqli_query($query_RecScoresheet);
+  $totalRows_RecScoresheet = mysqli_num_rows($all_RecScoresheet);
 }
 $totalPages_RecScoresheet = ceil($totalRows_RecScoresheet/$maxRows_RecScoresheet)-1;
 ?>
@@ -96,7 +96,7 @@ $totalPages_RecScoresheet = ceil($totalRows_RecScoresheet/$maxRows_RecScoresheet
                         <td><?php echo $row_RecScoresheet['Mark']; ?></td>
                         <td><?php echo $row_RecScoresheet['Grade']; ?></td>
                       </tr>
-                      <?php } while ($row_RecScoresheet = mysql_fetch_assoc($RecScoresheet)); ?>
+                      <?php } while ($row_RecScoresheet = mysqli_fetch_assoc($RecScoresheet)); ?>
                   </table>
                 </div>
                	</div>	
@@ -109,5 +109,5 @@ $totalPages_RecScoresheet = ceil($totalRows_RecScoresheet/$maxRows_RecScoresheet
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($RecScoresheet);
+mysqli_free_result($RecScoresheet);
 ?>

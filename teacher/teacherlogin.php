@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -49,20 +49,20 @@ if (isset($_POST['txt1'])) {
   $MM_redirectLoginSuccess = "teacheruserarea.php";
   $MM_redirectLoginFailed = "teacherlogin.php";
   $MM_redirecttoReferrer = false;
-  mysql_select_db($database_PTS, $PTS);
+  mysqli_select_db($database_PTS, $PTS);
   
   $LoginRS__query=sprintf("SELECT faculty_no,username, password FROM teacher WHERE username=%s AND password=%s",
     GetSQLValueString($loginUsername, "text"), GetSQLValueString($password, "text")); 
    
-  $LoginRS = mysql_query($LoginRS__query, $PTS) or die(mysql_error());
-  $loginFoundUser = mysql_num_rows($LoginRS);
+  $LoginRS = mysqli_query($LoginRS__query, $PTS) or die(mysqli_error());
+  $loginFoundUser = mysqli_num_rows($LoginRS);
  $facultyno=0;
   if ($loginFoundUser) {
      $loginStrGroup = "";
     
 	if (PHP_VERSION >= 5.1) {session_regenerate_id(true);} else {session_regenerate_id();}
     //declare two session variables and assign them
-	$rec=mysql_fetch_assoc($LoginRS);
+	$rec=mysqli_fetch_assoc($LoginRS);
 	$facultyno=$rec['faculty_no'] ;
     $_SESSION['MM_Username'] = $loginUsername;
     $_SESSION['MM_UserGroup'] = $loginStrGroup;	      

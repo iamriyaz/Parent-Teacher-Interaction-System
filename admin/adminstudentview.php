@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -39,7 +39,7 @@ if (isset($_GET['pageNum_recSTD'])) {
   $pageNum_recSTD = $_GET['pageNum_recSTD'];
 }
 $startRow_recSTD = $pageNum_recSTD * $maxRows_recSTD;
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 
 $std=$div="---Select---";
  if(isset($_REQUEST['txtdiv']))
@@ -59,14 +59,14 @@ else
 
 }
 $query_limit_recSTD = sprintf("%s LIMIT %d, %d", $query_recSTD, $startRow_recSTD, $maxRows_recSTD);
-$recSTD = mysql_query($query_limit_recSTD, $PTS) or die(mysql_error());
-$row_recSTD = mysql_fetch_assoc($recSTD);
+$recSTD = mysqli_query($query_limit_recSTD, $PTS) or die(mysqli_error());
+$row_recSTD = mysqli_fetch_assoc($recSTD);
 
 if (isset($_GET['totalRows_recSTD'])) {
   $totalRows_recSTD = $_GET['totalRows_recSTD'];
 } else {
-  $all_recSTD = mysql_query($query_recSTD);
-  $totalRows_recSTD = mysql_num_rows($all_recSTD);
+  $all_recSTD = mysqli_query($query_recSTD);
+  $totalRows_recSTD = mysqli_num_rows($all_recSTD);
 }
 $totalPages_recSTD = ceil($totalRows_recSTD/$maxRows_recSTD)-1;
 
@@ -177,7 +177,7 @@ function DIV()
 	 do {
 		 if(isset($_REQUEST['btnDelete'.$c]))
 		 {
-			 mysql_query("delete from student where reg_no=".$row_recSTD['reg_no'],$PTS);
+			 mysqli_query("delete from student where reg_no=".$row_recSTD['reg_no'],$PTS);
 			 header("location:".$_SERVER['PHP_SELF']);
 		 }
 		  ?>
@@ -193,7 +193,7 @@ function DIV()
       </tr>
       <?php 
 	  $c++;
-	  } while ($row_recSTD = mysql_fetch_assoc($recSTD)); ?>
+	  } while ($row_recSTD = mysqli_fetch_assoc($recSTD)); ?>
   </table>
   <p>&nbsp;
   <table border="0">
@@ -225,5 +225,5 @@ function DIV()
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($recSTD);
+mysqli_free_result($recSTD);
 ?>

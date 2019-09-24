@@ -23,7 +23,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -60,8 +60,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")&&(isset($_R
                        GetSQLValueString($_POST['txtmsgclass'], "text"),
 					   GetSQLValueString($_POST['txtdiv'],"text"));
 
-  mysql_select_db($database_PTS, $PTS);
-  $Result1 = mysql_query($insertSQL, $PTS) or die(mysql_error());
+  mysqli_select_db($database_PTS, $PTS);
+  $Result1 = mysqli_query($insertSQL, $PTS) or die(mysqli_error());
   $grpmsg="Message sent !..";
 }
 
@@ -131,10 +131,10 @@ function ozekiSend($phone, $msg, $debug=false){
 $msg="";
 if(isset($_POST['btnSent']))
 {
-	  mysql_select_db($database_PTS, $PTS);
+	  mysqli_select_db($database_PTS, $PTS);
 	  $query="select phone_no from parent where username in(select parent_username from student where standard=".$_REQUEST['txtmsgclass']." and division='".$_POST['txtdiv']."')";
-  $Result = mysql_query($query, $PTS) or die(mysql_error());
-  while($rec=mysql_fetch_assoc($Result))
+  $Result = mysqli_query($query, $PTS) or die(mysqli_error());
+  while($rec=mysqli_fetch_assoc($Result))
   {
 $phonenum = $rec['phone_no'];
 $message = $_POST['txtmsg'];

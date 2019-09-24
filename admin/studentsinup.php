@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -55,8 +55,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
                        GetSQLValueString($_POST['txtcaste'], "text")
                       );
 
-  mysql_select_db($database_PTS, $PTS);
-  $Result1 = mysql_query($insertSQL, $PTS) or die(mysql_error());
+  mysqli_select_db($database_PTS, $PTS);
+  $Result1 = mysqli_query($insertSQL, $PTS) or die(mysqli_error());
 
  $msg="Account  successfully created !..";
 }
@@ -65,11 +65,11 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 
 
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_recparent = "SELECT parent.username, parent.first_name, parent.last_name FROM parent";
-$recparent = mysql_query($query_recparent, $PTS) or die(mysql_error());
-$row_recparent = mysql_fetch_assoc($recparent);
-$totalRows_recparent = mysql_num_rows($recparent);
+$recparent = mysqli_query($query_recparent, $PTS) or die(mysqli_error());
+$row_recparent = mysqli_fetch_assoc($recparent);
+$totalRows_recparent = mysqli_num_rows($recparent);
 ?>
 <?php require_once('header1.php')?>
 

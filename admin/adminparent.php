@@ -10,7 +10,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -43,17 +43,17 @@ if (isset($_GET['pageNum_Recparent1'])) {
 }
 $startRow_Recparent1 = $pageNum_Recparent1 * $maxRows_Recparent1;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_Recparent1 = "SELECT parent.first_name, parent.last_name, parent.phone_no, parent.relation,username,verified FROM parent";
 $query_limit_Recparent1 = sprintf("%s LIMIT %d, %d", $query_Recparent1, $startRow_Recparent1, $maxRows_Recparent1);
-$Recparent1 = mysql_query($query_limit_Recparent1, $PTS) or die(mysql_error());
-$row_Recparent1 = mysql_fetch_assoc($Recparent1);
+$Recparent1 = mysqli_query($query_limit_Recparent1, $PTS) or die(mysqli_error());
+$row_Recparent1 = mysqli_fetch_assoc($Recparent1);
 
 if (isset($_GET['totalRows_Recparent1'])) {
   $totalRows_Recparent1 = $_GET['totalRows_Recparent1'];
 } else {
-  $all_Recparent1 = mysql_query($query_Recparent1);
-  $totalRows_Recparent1 = mysql_num_rows($all_Recparent1);
+  $all_Recparent1 = mysqli_query($query_Recparent1);
+  $totalRows_Recparent1 = mysqli_num_rows($all_Recparent1);
 }
 $totalPages_Recparent1 = ceil($totalRows_Recparent1/$maxRows_Recparent1)-1;
 
@@ -116,7 +116,7 @@ $queryString_Recparent1 = sprintf("&totalRows_Recparent1=%d%s", $totalRows_Recpa
 			 
 			 
 			{
-				mysql_query ("update parent set verified=1 where username='".$row_Recparent1['username']."'",$PTS) or die(mysql_error($PTS));
+				mysqli_query ("update parent set verified=1 where username='".$row_Recparent1['username']."'",$PTS) or die(mysqli_error($PTS));
 				
 				header("location:".$_SERVER['PHP_SELF']);
 			}
@@ -125,7 +125,7 @@ $queryString_Recparent1 = sprintf("&totalRows_Recparent1=%d%s", $totalRows_Recpa
 			 
 			 
 			{
-				mysql_query ("update parent set verified=0 where username='".$row_Recparent1['username']."'",$PTS);
+				mysqli_query ("update parent set verified=0 where username='".$row_Recparent1['username']."'",$PTS);
 				
 				header("location:".$_SERVER['PHP_SELF']);
 			}
@@ -143,7 +143,7 @@ $queryString_Recparent1 = sprintf("&totalRows_Recparent1=%d%s", $totalRows_Recpa
       </tr>
       <?php $ver++;
 	  
-	   } while ($row_Recparent1 = mysql_fetch_assoc($Recparent1)); ?>
+	   } while ($row_Recparent1 = mysqli_fetch_assoc($Recparent1)); ?>
   </table>
   <table border="0">
     <tr>
@@ -173,5 +173,5 @@ $queryString_Recparent1 = sprintf("&totalRows_Recparent1=%d%s", $totalRows_Recpa
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($Recparent1);
+mysqli_free_result($Recparent1);
 ?>

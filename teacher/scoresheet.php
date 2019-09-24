@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -64,7 +64,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -101,16 +101,16 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
                        GetSQLValueString($_POST['txtGrade'], "text"),
                        GetSQLValueString($username, "text"));
 
-  mysql_select_db($database_PTS, $PTS);
-  $Result1 = mysql_query($insertSQL, $PTS) or die(mysql_error());
+  mysqli_select_db($database_PTS, $PTS);
+  $Result1 = mysqli_query($insertSQL, $PTS) or die(mysqli_error());
 }
 
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_RecSubject = "SELECT * FROM subject WHERE subject.standard=$std";
-$RecSubject = mysql_query($query_RecSubject, $PTS) or die(mysql_error());
-$row_RecSubject = mysql_fetch_assoc($RecSubject);
-$totalRows_RecSubject = mysql_num_rows($RecSubject);
+$RecSubject = mysqli_query($query_RecSubject, $PTS) or die(mysqli_error());
+$row_RecSubject = mysqli_fetch_assoc($RecSubject);
+$totalRows_RecSubject = mysqli_num_rows($RecSubject);
 
 $maxRows_RecStdScore = 10;
 $pageNum_RecStdScore = 0;
@@ -119,17 +119,17 @@ if (isset($_GET['pageNum_RecStdScore'])) {
 }
 $startRow_RecStdScore = $pageNum_RecStdScore * $maxRows_RecStdScore;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_RecStdScore = "SELECT * FROM scoresheet,subject WHERE subject.sub_code=scoresheet.Subject and  scoresheet.RegNO='$regno' AND scoresheet.Teacher='$username'";
 $query_limit_RecStdScore = sprintf("%s LIMIT %d, %d", $query_RecStdScore, $startRow_RecStdScore, $maxRows_RecStdScore);
-$RecStdScore = mysql_query($query_limit_RecStdScore, $PTS) or die(mysql_error());
-$row_RecStdScore = mysql_fetch_assoc($RecStdScore);
+$RecStdScore = mysqli_query($query_limit_RecStdScore, $PTS) or die(mysqli_error());
+$row_RecStdScore = mysqli_fetch_assoc($RecStdScore);
 
 if (isset($_GET['totalRows_RecStdScore'])) {
   $totalRows_RecStdScore = $_GET['totalRows_RecStdScore'];
 } else {
-  $all_RecStdScore = mysql_query($query_RecStdScore);
-  $totalRows_RecStdScore = mysql_num_rows($all_RecStdScore);
+  $all_RecStdScore = mysqli_query($query_RecStdScore);
+  $totalRows_RecStdScore = mysqli_num_rows($all_RecStdScore);
 }
 $totalPages_RecStdScore = ceil($totalRows_RecStdScore/$maxRows_RecStdScore)-1;
 ?>
@@ -170,11 +170,11 @@ do {
 ?>
           <option value="<?php echo $row_RecSubject['sub_code']?>"<?php if (!(strcmp($row_RecSubject['sub_code'], $row_RecSubject['sub_code']))) {echo "selected=\"selected\"";} ?>><?php echo $row_RecSubject['sub_name']?></option>
           <?php
-} while ($row_RecSubject = mysql_fetch_assoc($RecSubject));
-  $rows = mysql_num_rows($RecSubject);
+} while ($row_RecSubject = mysqli_fetch_assoc($RecSubject));
+  $rows = mysqli_num_rows($RecSubject);
   if($rows > 0) {
-      mysql_data_seek($RecSubject, 0);
-	  $row_RecSubject = mysql_fetch_assoc($RecSubject);
+      mysqli_data_seek($RecSubject, 0);
+	  $row_RecSubject = mysqli_fetch_assoc($RecSubject);
   }
 ?>
         </select>
@@ -222,7 +222,7 @@ do {
         <td><?php echo $row_RecStdScore['Mark']; ?></td>
         <td><?php echo $row_RecStdScore['Grade']; ?></td>
         </tr>
-      <?php } while ($row_RecStdScore = mysql_fetch_assoc($RecStdScore)); ?>
+      <?php } while ($row_RecStdScore = mysqli_fetch_assoc($RecStdScore)); ?>
   </table>
 </form>
 <script type="text/javascript">
@@ -241,7 +241,7 @@ var sprytextfield2 = new Spry.Widget.ValidationTextField("sprytextfield2");
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($RecSubject);
+mysqli_free_result($RecSubject);
 
-mysql_free_result($RecStdScore);
+mysqli_free_result($RecStdScore);
 ?>

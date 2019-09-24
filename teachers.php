@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -38,17 +38,17 @@ if (isset($_GET['pageNum_recFaculty'])) {
 }
 $startRow_recFaculty = $pageNum_recFaculty * $maxRows_recFaculty;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_recFaculty = "SELECT * FROM teacher";
 $query_limit_recFaculty = sprintf("%s LIMIT %d, %d", $query_recFaculty, $startRow_recFaculty, $maxRows_recFaculty);
-$recFaculty = mysql_query($query_limit_recFaculty, $PTS) or die(mysql_error());
-$row_recFaculty = mysql_fetch_assoc($recFaculty);
+$recFaculty = mysqli_query($query_limit_recFaculty, $PTS) or die(mysqli_error());
+$row_recFaculty = mysqli_fetch_assoc($recFaculty);
 
 if (isset($_GET['totalRows_recFaculty'])) {
   $totalRows_recFaculty = $_GET['totalRows_recFaculty'];
 } else {
-  $all_recFaculty = mysql_query($query_recFaculty);
-  $totalRows_recFaculty = mysql_num_rows($all_recFaculty);
+  $all_recFaculty = mysqli_query($query_recFaculty);
+  $totalRows_recFaculty = mysqli_num_rows($all_recFaculty);
 }
 $totalPages_recFaculty = ceil($totalRows_recFaculty/$maxRows_recFaculty)-1;
 ?>
@@ -96,7 +96,7 @@ $totalPages_recFaculty = ceil($totalRows_recFaculty/$maxRows_recFaculty)-1;
 						</div>
 					</div>
 				</div>
-					 <?php } while ($row_recFaculty = mysql_fetch_assoc($recFaculty)); ?>
+					 <?php } while ($row_recFaculty = mysqli_fetch_assoc($recFaculty)); ?>
 				
 				
 			
@@ -115,5 +115,5 @@ $totalPages_recFaculty = ceil($totalRows_recFaculty/$maxRows_recFaculty)-1;
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($recFaculty);
+mysqli_free_result($recFaculty);
 ?>

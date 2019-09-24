@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -57,17 +57,17 @@ if (isset($_GET['pageNum_Recallteachers'])) {
 }
 $startRow_Recallteachers = $pageNum_Recallteachers * $maxRows_Recallteachers;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_Recallteachers = "SELECT `faculty_no`, `first_name`, `last_name`, `address`, `phone_no`, `e_mail`, `experience`, `qualification`, `gender`, `is_class_teacher`, teacher.`standard`, `division`, `username`, `password`, subject.sub_name FROM teacher,subject where teacher.standard in (select standard from student where ration_card_no='$CNO') and division in(select division from student where ration_card_no='$CNO') and subject.sub_code=teacher.subject ";
 $query_limit_Recallteachers = sprintf("%s LIMIT %d, %d", $query_Recallteachers, $startRow_Recallteachers, $maxRows_Recallteachers);
-$Recallteachers = mysql_query($query_limit_Recallteachers, $PTS) or die(mysql_error());
-$row_Recallteachers = mysql_fetch_assoc($Recallteachers);
+$Recallteachers = mysqli_query($query_limit_Recallteachers, $PTS) or die(mysqli_error());
+$row_Recallteachers = mysqli_fetch_assoc($Recallteachers);
 
 if (isset($_GET['totalRows_Recallteachers'])) {
   $totalRows_Recallteachers = $_GET['totalRows_Recallteachers'];
 } else {
-  $all_Recallteachers = mysql_query($query_Recallteachers);
-  $totalRows_Recallteachers = mysql_num_rows($all_Recallteachers);
+  $all_Recallteachers = mysqli_query($query_Recallteachers);
+  $totalRows_Recallteachers = mysqli_num_rows($all_Recallteachers);
 }
 $totalPages_Recallteachers = ceil($totalRows_Recallteachers/$maxRows_Recallteachers)-1;
 
@@ -155,7 +155,7 @@ $queryString_Recallteachers = sprintf("&totalRows_Recallteachers=%d%s", $totalRo
         <td>Division</td>
         <td><?php echo $row_Recallteachers['division']; ?></td>
       </tr>
-      <?php } while ($row_Recallteachers = mysql_fetch_assoc($Recallteachers)); ?>
+      <?php } while ($row_Recallteachers = mysqli_fetch_assoc($Recallteachers)); ?>
   </table>
   <table border="0">
     <tr>
@@ -185,5 +185,5 @@ $queryString_Recallteachers = sprintf("&totalRows_Recallteachers=%d%s", $totalRo
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($Recallteachers);
+mysqli_free_result($Recallteachers);
 ?>

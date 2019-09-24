@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -38,17 +38,17 @@ if (isset($_GET['pageNum_recgallery'])) {
 }
 $startRow_recgallery = $pageNum_recgallery * $maxRows_recgallery;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_recgallery = "SELECT * FROM gallery ORDER BY gallery.id desc";
 $query_limit_recgallery = sprintf("%s LIMIT %d, %d", $query_recgallery, $startRow_recgallery, $maxRows_recgallery);
-$recgallery = mysql_query($query_limit_recgallery, $PTS) or die(mysql_error());
-$row_recgallery = mysql_fetch_assoc($recgallery);
+$recgallery = mysqli_query($query_limit_recgallery, $PTS) or die(mysqli_error());
+$row_recgallery = mysqli_fetch_assoc($recgallery);
 
 if (isset($_GET['totalRows_recgallery'])) {
   $totalRows_recgallery = $_GET['totalRows_recgallery'];
 } else {
-  $all_recgallery = mysql_query($query_recgallery);
-  $totalRows_recgallery = mysql_num_rows($all_recgallery);
+  $all_recgallery = mysqli_query($query_recgallery);
+  $totalRows_recgallery = mysqli_num_rows($all_recgallery);
 }
 $totalPages_recgallery = ceil($totalRows_recgallery/$maxRows_recgallery)-1;
 
@@ -67,8 +67,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
                        GetSQLValueString($_FILES['filegallery']['name'], "text"),
                        GetSQLValueString($_POST['txtDesc'], "text"));
 
-  mysql_select_db($database_PTS, $PTS);
-  $Result1 = mysql_query($insertSQL, $PTS) or die(mysql_error($PTS));
+  mysqli_select_db($database_PTS, $PTS);
+  $Result1 = mysqli_query($insertSQL, $PTS) or die(mysqli_error($PTS));
   header("location:".$_SERVER['PHP_SELF']);
 }
 else
@@ -136,7 +136,7 @@ else
 	 //Delete a record
 	 if(isset($_POST['btnDelete'.$c]))
 	 {
-		 mysql_query("delete from gallery where id=".$row_recgallery['id'],$PTS);
+		 mysqli_query("delete from gallery where id=".$row_recgallery['id'],$PTS);
 		 header("location:".$_SERVER['PHP_SELF']);
 	 }
 	 ?>
@@ -147,7 +147,7 @@ else
       </tr>
       <?php 
 	  $c++;
-	  } while ($row_recgallery = mysql_fetch_assoc($recgallery)); ?>
+	  } while ($row_recgallery = mysqli_fetch_assoc($recgallery)); ?>
   </table>
 </form>
   </div>
@@ -161,5 +161,5 @@ else
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($recgallery);
+mysqli_free_result($recgallery);
 ?>

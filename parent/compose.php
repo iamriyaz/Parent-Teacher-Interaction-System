@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -58,11 +58,11 @@ if (isset($_SERVER['QUERY_STRING'])) {
   $editFormAction .= "?" . htmlentities($_SERVER['QUERY_STRING']);
 }
 $teacher="";
- mysql_select_db($database_PTS, $PTS);
-  $query=mysql_query("select username from teacher where is_class_teacher=1 and standard=$std and division='$div'",$PTS);
-  if(mysql_num_rows($query))
+ mysqli_select_db($database_PTS, $PTS);
+  $query=mysqli_query("select username from teacher where is_class_teacher=1 and standard=$std and division='$div'",$PTS);
+  if(mysqli_num_rows($query))
   {
-	  $rec=mysql_fetch_assoc($query);
+	  $rec=mysqli_fetch_assoc($query);
 	  $teacher=$rec['username'];
   }
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
@@ -73,7 +73,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
                        GetSQLValueString($_POST['txtmsg'], "text"));
 
 
-  $Result1 = mysql_query($insertSQL, $PTS) or die(mysql_error());
+  $Result1 = mysqli_query($insertSQL, $PTS) or die(mysqli_error());
 }
 
 $maxRows_recsent = 10;
@@ -83,17 +83,17 @@ if (isset($_GET['pageNum_recsent'])) {
 }
 $startRow_recsent = $pageNum_recsent * $maxRows_recsent;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_recsent = "SELECT * FROM chats WHERE chats.from_user='$username'";
 $query_limit_recsent = sprintf("%s LIMIT %d, %d", $query_recsent, $startRow_recsent, $maxRows_recsent);
-$recsent = mysql_query($query_limit_recsent, $PTS) or die(mysql_error());
-$row_recsent = mysql_fetch_assoc($recsent);
+$recsent = mysqli_query($query_limit_recsent, $PTS) or die(mysqli_error());
+$row_recsent = mysqli_fetch_assoc($recsent);
 
 if (isset($_GET['totalRows_recsent'])) {
   $totalRows_recsent = $_GET['totalRows_recsent'];
 } else {
-  $all_recsent = mysql_query($query_recsent);
-  $totalRows_recsent = mysql_num_rows($all_recsent);
+  $all_recsent = mysqli_query($query_recsent);
+  $totalRows_recsent = mysqli_num_rows($all_recsent);
 }
 $totalPages_recsent = ceil($totalRows_recsent/$maxRows_recsent)-1;
 ?>
@@ -177,7 +177,7 @@ $totalPages_recsent = ceil($totalRows_recsent/$maxRows_recsent)-1;
 	 //Delete a record
 	 if(isset($_POST['btnDelete'.$c]))
 	 {
-		 mysql_query("delete from chats where id=".$row_recsent['id'],$PTS) or die(mysql_error($PTS));
+		 mysqli_query("delete from chats where id=".$row_recsent['id'],$PTS) or die(mysqli_error($PTS));
 		 header("location:".$_SERVER['PHP_SELF']);
 	 }
 	 
@@ -198,7 +198,7 @@ $totalPages_recsent = ceil($totalRows_recsent/$maxRows_recsent)-1;
         </tr>
       <?php
 	  $c++;
-	   } while ($row_recsent = mysql_fetch_assoc($recsent)); ?>
+	   } while ($row_recsent = mysqli_fetch_assoc($recsent)); ?>
   </table>
 </form>
                 </div>
@@ -212,5 +212,5 @@ $totalPages_recsent = ceil($totalRows_recsent/$maxRows_recsent)-1;
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($recsent);
+mysqli_free_result($recsent);
 ?>

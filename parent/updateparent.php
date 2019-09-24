@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -64,8 +64,8 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form2")) {
                        GetSQLValueString($_POST['occupation'], "text"),
                       GetSQLValueString($_POST['username'], "text"));
 
-  mysql_select_db($database_PTS, $PTS);
-  $Result1 = mysql_query($updateSQL, $PTS) or die(mysql_error());
+  mysqli_select_db($database_PTS, $PTS);
+  $Result1 = mysqli_query($updateSQL, $PTS) or die(mysqli_error());
 
   $updateGoTo = "parentuserarea.php";
   if (isset($_SERVER['QUERY_STRING'])) {
@@ -75,11 +75,11 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form2")) {
   header(sprintf("Location: %s", $updateGoTo));
 }
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_Recupdateparent = "SELECT * FROM parent WHERE parent.username='$username'";
-$Recupdateparent = mysql_query($query_Recupdateparent, $PTS) or die(mysql_error());
-$row_Recupdateparent = mysql_fetch_assoc($Recupdateparent);
-$totalRows_Recupdateparent = mysql_num_rows($Recupdateparent);
+$Recupdateparent = mysqli_query($query_Recupdateparent, $PTS) or die(mysqli_error());
+$row_Recupdateparent = mysqli_fetch_assoc($Recupdateparent);
+$totalRows_Recupdateparent = mysqli_num_rows($Recupdateparent);
 ?>
 <?php require_once('header1.php')?>
 
@@ -163,5 +163,5 @@ $totalRows_Recupdateparent = mysql_num_rows($Recupdateparent);
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($Recupdateparent);
+mysqli_free_result($Recupdateparent);
 ?>

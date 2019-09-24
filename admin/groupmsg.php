@@ -22,7 +22,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -52,12 +52,12 @@ if (isset($_SERVER['QUERY_STRING'])) {
 }
 $grpmsg="";
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")&&(isset($_REQUEST['btnsend']))) {
-	  mysql_select_db($database_PTS, $PTS);
+	  mysqli_select_db($database_PTS, $PTS);
 
 	if($_POST['txtto']=="Parent")
 	{
-		$result=mysql_query("select username from parent where verified=1",$PTS) or die(mysql_error($PTS));
-		while($rec=mysql_fetch_assoc($result))
+		$result=mysqli_query("select username from parent where verified=1",$PTS) or die(mysqli_error($PTS));
+		while($rec=mysqli_fetch_assoc($result))
 		{
 			 $insertSQL = sprintf("INSERT INTO groupmsg (sub, msg, `from`, `to`) VALUES (%s, %s, %s, %s)",
                        GetSQLValueString($_POST['txtSubject'], "text"),
@@ -66,13 +66,13 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")&&(isset($_R
                        GetSQLValueString($rec['username'], "text"));
 
 
-  $Result1 = mysql_query($insertSQL, $PTS) or die(mysql_error());
+  $Result1 = mysqli_query($insertSQL, $PTS) or die(mysqli_error());
 		}
 	}
 	if($_POST['txtto']=="Teacher")
 	{
-		$result=mysql_query("select username from teacher",$PTS) or die(mysql_error($PTS));
-		while($rec=mysql_fetch_assoc($result))
+		$result=mysqli_query("select username from teacher",$PTS) or die(mysqli_error($PTS));
+		while($rec=mysqli_fetch_assoc($result))
 		{
 			 $insertSQL = sprintf("INSERT INTO groupmsg (sub, msg, `from`, `to`) VALUES (%s, %s, %s, %s)",
                        GetSQLValueString($_POST['txtSubject'], "text"),
@@ -81,7 +81,7 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")&&(isset($_R
                        GetSQLValueString($rec['username'], "text"));
 
 
-  $Result1 = mysql_query($insertSQL, $PTS) or die(mysql_error());
+  $Result1 = mysqli_query($insertSQL, $PTS) or die(mysqli_error());
 		}
 	}
  $grpmsg="Message sent !..";
@@ -156,8 +156,8 @@ if(isset($_POST['btnSent']))
 	{
 	
 	  $query="select phone_no from parent";
-  $Result = mysql_query($query, $PTS) or die(mysql_error());
-  while($rec=mysql_fetch_assoc($Result))
+  $Result = mysqli_query($query, $PTS) or die(mysqli_error());
+  while($rec=mysqli_fetch_assoc($Result))
   {
 $phonenum = $rec['phone_no'];
 $message = $_POST['txtmsg'];
@@ -170,8 +170,8 @@ ozekiSend($phonenum,$message,$debug);
 	{
 	
 	  $query="select phone_no from teacher";
-  $Result = mysql_query($query, $PTS) or die(mysql_error());
-  while($rec=mysql_fetch_assoc($Result))
+  $Result = mysqli_query($query, $PTS) or die(mysqli_error());
+  while($rec=mysqli_fetch_assoc($Result))
   {
 $phonenum = $rec['phone_no'];
 $message = $_POST['txtmsg'];

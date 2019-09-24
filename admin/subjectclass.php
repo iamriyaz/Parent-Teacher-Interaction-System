@@ -7,7 +7,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -42,8 +42,8 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")&&(isset($_P
                        GetSQLValueString($_POST['txtname'], "text"),
                        GetSQLValueString($_POST['txtclass'], "int"));
 
-  mysql_select_db($database_PTS, $PTS);
-  $Result1 = mysql_query($insertSQL, $PTS) or die(mysql_error($PTS));
+  mysqli_select_db($database_PTS, $PTS);
+  $Result1 = mysqli_query($insertSQL, $PTS) or die(mysqli_error($PTS));
 
   $insertGoTo = "subjectclass.php";
   if (isset($_SERVER['QUERY_STRING'])) {
@@ -60,17 +60,17 @@ if (isset($_GET['pageNum_Recsubclas'])) {
 }
 $startRow_Recsubclas = $pageNum_Recsubclas * $maxRows_Recsubclas;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_Recsubclas = "SELECT * FROM subject";
 $query_limit_Recsubclas = sprintf("%s LIMIT %d, %d", $query_Recsubclas, $startRow_Recsubclas, $maxRows_Recsubclas);
-$Recsubclas = mysql_query($query_limit_Recsubclas, $PTS) or die(mysql_error());
-$row_Recsubclas = mysql_fetch_assoc($Recsubclas);
+$Recsubclas = mysqli_query($query_limit_Recsubclas, $PTS) or die(mysqli_error());
+$row_Recsubclas = mysqli_fetch_assoc($Recsubclas);
 
 if (isset($_GET['totalRows_Recsubclas'])) {
   $totalRows_Recsubclas = $_GET['totalRows_Recsubclas'];
 } else {
-  $all_Recsubclas = mysql_query($query_Recsubclas);
-  $totalRows_Recsubclas = mysql_num_rows($all_Recsubclas);
+  $all_Recsubclas = mysqli_query($query_Recsubclas);
+  $totalRows_Recsubclas = mysqli_num_rows($all_Recsubclas);
 }
 $totalPages_Recsubclas = ceil($totalRows_Recsubclas/$maxRows_Recsubclas)-1;
 ?>
@@ -158,7 +158,7 @@ $totalPages_Recsubclas = ceil($totalRows_Recsubclas/$maxRows_Recsubclas)-1;
 	 //Delete a record
 	 if(isset($_POST['btnDelete'.$c]))
 	 {
-		 mysql_query("delete from subject  where sub_code=".$row_Recsubclas['sub_code'],$PTS);
+		 mysqli_query("delete from subject  where sub_code=".$row_Recsubclas['sub_code'],$PTS);
 		 header("location:".$_SERVER['PHP_SELF']);
 	 }
 	 if(isset($_POST['btnedit'.$c]))
@@ -177,7 +177,7 @@ $totalPages_Recsubclas = ceil($totalRows_Recsubclas/$maxRows_Recsubclas)-1;
       </tr>
       <?php
 	  $c++;
-	   } while ($row_Recsubclas = mysql_fetch_assoc($Recsubclas)); ?>
+	   } while ($row_Recsubclas = mysqli_fetch_assoc($Recsubclas)); ?>
   </table>
 </form>
 <script type="text/javascript">
@@ -196,5 +196,5 @@ var spryselect1 = new Spry.Widget.ValidationSelect("spryselect1");
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($Recsubclas);
+mysqli_free_result($Recsubclas);
 ?>

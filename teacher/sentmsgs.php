@@ -23,7 +23,7 @@ function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDe
     $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
   }
 
-  $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+  $theValue = function_exists("mysqli_real_escape_string") ? mysqli_real_escape_string($theValue) : mysqli_escape_string($theValue);
 
   switch ($theType) {
     case "text":
@@ -56,17 +56,17 @@ if (isset($_GET['pageNum_recSentItems'])) {
 }
 $startRow_recSentItems = $pageNum_recSentItems * $maxRows_recSentItems;
 
-mysql_select_db($database_PTS, $PTS);
+mysqli_select_db($database_PTS, $PTS);
 $query_recSentItems = "SELECT * FROM groupmsg WHERE groupmsg.`from`='$username'";
 $query_limit_recSentItems = sprintf("%s LIMIT %d, %d", $query_recSentItems, $startRow_recSentItems, $maxRows_recSentItems);
-$recSentItems = mysql_query($query_limit_recSentItems, $PTS) or die(mysql_error());
-$row_recSentItems = mysql_fetch_assoc($recSentItems);
+$recSentItems = mysqli_query($query_limit_recSentItems, $PTS) or die(mysqli_error());
+$row_recSentItems = mysqli_fetch_assoc($recSentItems);
 
 if (isset($_GET['totalRows_recSentItems'])) {
   $totalRows_recSentItems = $_GET['totalRows_recSentItems'];
 } else {
-  $all_recSentItems = mysql_query($query_recSentItems);
-  $totalRows_recSentItems = mysql_num_rows($all_recSentItems);
+  $all_recSentItems = mysqli_query($query_recSentItems);
+  $totalRows_recSentItems = mysqli_num_rows($all_recSentItems);
 }
 $totalPages_recSentItems = ceil($totalRows_recSentItems/$maxRows_recSentItems)-1;
 
@@ -117,7 +117,7 @@ $queryString_recSentItems = sprintf("&totalRows_recSentItems=%d%s", $totalRows_r
 	 //Delete a record
 	 if(isset($_POST['btnDelete'.$c]))
 	 {
-		 mysql_query("delete from groupmsg where id=".$row_recSentItems['id'],$PTS) or die(mysql_error($PTS));
+		 mysqli_query("delete from groupmsg where id=".$row_recSentItems['id'],$PTS) or die(mysqli_error($PTS));
 		 header("location:".$_SERVER['PHP_SELF']);
 	 }
 					 ?>
@@ -136,7 +136,7 @@ $queryString_recSentItems = sprintf("&totalRows_recSentItems=%d%s", $totalRows_r
                       </tr>
                       <?php 
 					  $c++;
-					  } while ($row_recSentItems = mysql_fetch_assoc($recSentItems)); ?>
+					  } while ($row_recSentItems = mysqli_fetch_assoc($recSentItems)); ?>
                   </table>
                   </form>
                   <p>&nbsp;                  
@@ -168,5 +168,5 @@ $queryString_recSentItems = sprintf("&totalRows_recSentItems=%d%s", $totalRows_r
 	<!--/about-->
 <?php require_once('footer.php')?>
 <?php
-mysql_free_result($recSentItems);
+mysqli_free_result($recSentItems);
 ?>
