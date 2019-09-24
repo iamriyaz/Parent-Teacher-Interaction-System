@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_Recinbox" value="name:id;datatype:int,name:from_user;datatype:string,name:recipient;datatype:string,name:message;datatype:blob" />
+</info>

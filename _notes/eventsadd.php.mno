@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_recevent1" value="name:id;datatype:int,name:caption;datatype:string,name:date;datatype:date,name:description;datatype:string,name:photo;datatype:string" />
+</info>

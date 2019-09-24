@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_recSentItems" value="name:id;datatype:int,name:sub;datatype:string,name:msg;datatype:blob,name:from;datatype:string,name:to;datatype:string,name:division;datatype:string" />
+</info>

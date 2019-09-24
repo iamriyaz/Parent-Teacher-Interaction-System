@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_recgallery" value="name:id;datatype:int,name:photo;datatype:string,name:description;datatype:string" />
+</info>

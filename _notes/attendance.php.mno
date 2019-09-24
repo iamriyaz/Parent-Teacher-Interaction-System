@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_recattendance1" value="name:regno;datatype:string,name:date;datatype:date,name:status;datatype:string,name:performance;datatype:blob,name:ID;datatype:int" />
+</info>

@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_Recsubclas" value="name:sub_code;datatype:int,name:sub_name;datatype:string,name:standard;datatype:int" />
+</info>

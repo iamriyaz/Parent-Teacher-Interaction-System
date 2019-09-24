@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_recfeedback" value="name:id;datatype:int,name:feedback;datatype:string,name:name;datatype:date" />
+</info>
